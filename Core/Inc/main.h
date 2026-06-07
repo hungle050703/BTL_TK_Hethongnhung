@@ -58,8 +58,6 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define ADC ADC1
-#define BTN1_USER_Pin GPIO_PIN_13
-#define BTN1_USER_GPIO_Port GPIOC
 #define STLK_MCO_Pin GPIO_PIN_0
 #define STLK_MCO_GPIO_Port GPIOH
 #define ADC_MQ2_Pin GPIO_PIN_0
@@ -68,12 +66,18 @@ void Error_Handler(void);
 #define GPIO_DATA_DB12_GPIO_Port GPIOA
 #define GPIO_DO_MH_sensor_Pin GPIO_PIN_3
 #define GPIO_DO_MH_sensor_GPIO_Port GPIOA
-#define BUZZER_ALARM_Pin GPIO_PIN_5
-#define BUZZER_ALARM_GPIO_Port GPIOA
+#define LCD_CS_Pin GPIO_PIN_4
+#define LCD_CS_GPIO_Port GPIOA
+#define LCD_DC_Pin GPIO_PIN_6
+#define LCD_DC_GPIO_Port GPIOA
+#define LCD_RST_Pin GPIO_PIN_4
+#define LCD_RST_GPIO_Port GPIOC
 #define LED_GREEN_ON_Pin GPIO_PIN_0
 #define LED_GREEN_ON_GPIO_Port GPIOB
 #define ADC2_AO_MH_sensor_Pin GPIO_PIN_1
 #define ADC2_AO_MH_sensor_GPIO_Port GPIOB
+#define BUZZER_ALARM_Pin GPIO_PIN_15
+#define BUZZER_ALARM_GPIO_Port GPIOD
 #define LED_RED_ALARM_Pin GPIO_PIN_4
 #define LED_RED_ALARM_GPIO_Port GPIOG
 #define UCPD_FLT_Pin GPIO_PIN_7

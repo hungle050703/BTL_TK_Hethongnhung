@@ -1,3 +1,4 @@
-../User/App/alarm_logic.c:6:6:AlarmLogic_Init	4	static
-../User/App/alarm_logic.c:10:14:Alarm_ProcessLogic	24	static
-../User/App/alarm_logic.c:24:6:Alarm_ExecuteAction	16	static
+../User/App/alarm_logic.c:11:6:AlarmLogic_Init	8	static
+../User/App/alarm_logic.c:19:6:Alarm_SetUserMute	16	static
+../User/App/alarm_logic.c:39:14:Alarm_ProcessLogic	16	static
+../User/App/alarm_logic.c:79:6:Alarm_ExecuteAction	16	static

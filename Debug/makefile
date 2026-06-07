@@ -9,9 +9,18 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include User/Services/display/subdir.mk
 -include User/Services/subdir.mk
+-include User/Drivers/UGUI/Fonts/subdir.mk
+-include User/Drivers/UGUI/subdir.mk
+-include User/Drivers/LCD/subdir.mk
 -include User/Drivers/subdir.mk
+-include User/App/display/subdir.mk
 -include User/App/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
+-include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
 -include Drivers/STM32H5xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
@@ -63,8 +72,8 @@ all: main-build
 main-build: BTL\ _Embedded_System_Design.elf secondary-outputs
 
 # Tool invocations
-BTL\ _Embedded_System_Design.elf BTL\ _Embedded_System_Design.map: $(OBJS) $(USER_OBJS) /home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/STM32H563ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "BTL _Embedded_System_Design.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"/home/hung-le/STM32Cube/Code/BTL_Embedded_System_Design/STM32H563ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL _Embedded_System_Design.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+BTL\ _Embedded_System_Design.elf BTL\ _Embedded_System_Design.map: $(OBJS) $(USER_OBJS) C:\Users\ADMIN\Documents\Code\BTL_TK_Hethongnhung\STM32H563ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "BTL _Embedded_System_Design.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\ADMIN\Documents\Code\BTL_TK_Hethongnhung\STM32H563ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL _Embedded_System_Design.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

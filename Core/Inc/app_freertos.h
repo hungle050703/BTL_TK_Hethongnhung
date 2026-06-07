@@ -54,7 +54,10 @@ extern "C" {
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
-extern osThreadId_t defaultTaskHandle;
+extern osThreadId_t Sensor_TaskHandle;
+extern osThreadId_t Alarm_Logic_TaskHandle;
+extern osThreadId_t Comm_4G_TaskHandle;
+extern osMutexId_t DataMutexHandle;
 extern osMessageQueueId_t myQueue01Handle;
 
 /* Exported function prototypes -----------------------------------------------*/
@@ -63,6 +66,8 @@ extern osMessageQueueId_t myQueue01Handle;
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
+void StartTask02(void *argument);
+void StartTask03(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 

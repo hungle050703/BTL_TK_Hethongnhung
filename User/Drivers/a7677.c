@@ -10,9 +10,9 @@ extern UART_HandleTypeDef huart5;
 void A7677_PowerOn(void) {
     // Lưu ý: Đổi lại tên Port/Pin bằng đúng thứ bạn cấu hình trong CubeMX
     // Ví dụ giả định bạn đặt tên chân là A7677_PWR
-    HAL_GPIO_WritePin(A7677_PWR_GPIO_Port, A7677_PWR_Pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(A7677_PWRKEY_GPIO_Port, A7677_PWRKEY_Pin, GPIO_PIN_RESET);
     osDelay(1500); // Pulse 1.5s
-    HAL_GPIO_WritePin(A7677_PWR_GPIO_Port, A7677_PWR_Pin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(A7677_PWRKEY_GPIO_Port, A7677_PWRKEY_Pin, GPIO_PIN_SET);
     
     // Đợi 5 giây cho hệ thống Sim, Network kết nối
     osDelay(5000); 

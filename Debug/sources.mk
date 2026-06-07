@@ -25,7 +25,16 @@ SUBDIRS := \
 Core/Src \
 Core/Startup \
 Drivers/STM32H5xx_HAL_Driver/Src \
+Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \
+Middlewares/Third_Party/FreeRTOS/Source \
+Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure \
+Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
 User/App \
+User/App/display \
+User/Drivers/LCD \
+User/Drivers/UGUI/Fonts \
+User/Drivers/UGUI \
 User/Drivers \
+User/Services/display \
 User/Services \
 

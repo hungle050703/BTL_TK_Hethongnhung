@@ -1,0 +1,4 @@
+../User/Drivers/a7677.c:10:6:A7677_PowerOn	8	static
+../User/Drivers/a7677.c:22:6:A7677_Send_AT	16	static
+../User/Drivers/a7677.c:28:6:A7677_Call	48	static
+../User/Drivers/a7677.c:35:6:A7677_SendSMS	88	static
