@@ -53,6 +53,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/ds18b20.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
  ../Core/Inc/FreeRTOSConfig.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
@@ -122,6 +123,7 @@ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progres
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/ds18b20.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:

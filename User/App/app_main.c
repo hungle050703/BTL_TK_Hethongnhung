@@ -58,7 +58,7 @@ void App_Main(void)
         float base_v = MQ2_GetBaseVoltage();
         bool fire_danger = (myData.mh_sensor_do == 0);
         uint8_t disable = is_buzzer_muted ? 1 : 0;
-        uint8_t fire = myData.fire_detected ? 1 : 0;
+        uint8_t fire = (myData.mh_sensor_do == 0) ? 1 : 0;
 
         // 3. Bắn dữ liệu UART truyền tin báo cháy sang Module ESP32 4G
         Process_Alarm_System(myData.temperature, supervisor, fire);

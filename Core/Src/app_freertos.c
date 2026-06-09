@@ -21,6 +21,9 @@
 #include "display/display_panel.h"
 #include "../Services/display/display_service.h"
 
+/* TÍCH HỢP: Khai báo dịch vụ gửi dữ liệu UART sang ESP32 */
+#include "../Services/esp32_service.h"
+
 extern SensorData_t myData;
 extern volatile uint8_t is_buzzer_muted;
 extern char alarm_status_text[];
@@ -99,6 +102,9 @@ void MX_FREERTOS_Init(void) {
   DataMutexHandle = osMutexNew(&DataMutex_attributes);
   myQueue01Handle = osMessageQueueNew (16, sizeof(uint16_t), &myQueue01_attributes);
 
+  /* TÍCH HỢP: Khởi tạo trạng thái ban đầu của ESP32 Service trước khi kích hoạt scheduler */
+  ESP32Service_Init();
+
   /* Thiet lap Thread vao dung con tro ham da khai bao prototype */
   Sensor_TaskHandle = osThreadNew(StartDefaultTask, NULL, &Sensor_Task_attributes);
   Alarm_Logic_TaskHandle = osThreadNew(StartTask02, NULL, &Alarm_Logic_Task_attributes);
@@ -172,6 +178,9 @@ void StartTask03(void *argument)
         osMutexRelease(DataMutexHandle);
     }
 
+    /* TÍCH HỢP: Quét sự thay đổi cảm biến hồng ngoại và đẩy bản tin UART sang ESP32 */
+    ESP32Service_Process();
+
     uint8_t fire = localData.fire_detected ? 1 : 0;
     float smoke_v = localData.smoke_conc;
     float smoke_percentage = (smoke_v / 5.0f) * 100.0f;
@@ -192,8 +201,8 @@ void StartTask03(void *argument)
     const char* mh_status = fire_danger ? "CO LUA/VAT CAN!!" : "BINH THUONG";
 
     printf("[RTOS LUONG 4G] STATUS PANEL: %s\r\n", alarm_status_text);
-    if (localData.temperature == -999.0f) {
-        printf("[RTOS LUONG 4G] Nhiet do:  MAT CAM BIEN\r\n");
+    if (localData.temperature == -999.0f || localData.temperature == 0.00f) {
+        printf("[RTOS LUONG 4G] Nhiet do:  MAT CAM BIEN (BO QUA)\r\n");
     } else {
         printf("[RTOS LUONG 4G] Nhiet do: %5.2f C\r\n", localData.temperature);
     }
@@ -203,7 +212,8 @@ void StartTask03(void *argument)
            mh_status, localData.mh_sensor_ao_volt);
     printf("[RTOS LUONG 4G] ----------------------------------------\r\n");
 
-    osDelay(1000);
+    /* Giảm chu kỳ xuống 250ms thay vì 1000ms để bắt tín hiệu sườn xung từ nút/hồng ngoại cực nhạy khi test trên lớp */
+    osDelay(250);
   }
   /* USER CODE END StartTask03 */
 }

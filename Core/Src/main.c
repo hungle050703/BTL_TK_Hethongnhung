@@ -22,6 +22,7 @@
 #include "alarm_logic.h"
 #include "display/display_panel.h"
 #include "mq2.h"
+#include "ds18b20.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -50,6 +51,9 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 SensorData_t myData;
+
+/* BIẾN TOÀN CỤC ĐỘC LẬP TÁCH KHỎI RTOS ĐỂ LƯU NHIỆT ĐỘ DS18B20 */
+volatile float global_ds18b20_temp = 25.0f;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -58,7 +62,6 @@ static void MPU_Config(void);
 void MX_FREERTOS_Init(void);
 
 /* USER CODE BEGIN PFP */
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -101,7 +104,10 @@ int main(void)
   MX_GPIO_Init();
   MX_ADC1_Init();
   MX_ICACHE_Init();
+
+  /* Khởi tạo phần cứng TIM2 đầu tiên */
   MX_TIM2_Init();
+
   MX_USART3_UART_Init();
   MX_ADC2_Init();
   MX_SPI1_Init();
@@ -110,22 +116,40 @@ int main(void)
   /* USER CODE BEGIN 2 */
   printf("\r\n==================================================\r\n");
   printf("BTL EMBEDDED: THIET BI TRUYEN TIN BAO CHAY STARTING...\r\n");
-  printf("Platform: ARM Cortex-M33 (STM32H5 Series)\r\n");
   printf("==================================================\r\n");
-  
+
+  /* 1. KÍCH HOẠT ĐẾM COUNTER CỦA TIM2 ĐỂ LÀM GỐC THỜI GIAN DELAY_US TRƯỚC */
   HAL_TIM_Base_Start(&htim2);
+
+  // Trễ một khoảng nhỏ bằng vòng lặp thô để thanh ghi TIM2->CNT kịp ổn định nhảy số
+  for(volatile int i = 0; i < 5000; i++);
+
   memset(&myData, 0, sizeof(SensorData_t));
-  printf("Hardware Peripheral Init Done! Activating FreeRTOS Kernel...\r\n");
-  
-  /* IMPORTANT: Initialize LCD, Sensors, and Alarms BEFORE osKernelStart() */
-  /* Reason: LCD_init() requires large stack; cannot be done in task context */
+
+  /* 2. BÂY GIỜ MỚI KHỞI TẠO CÁC DỊCH VỤ CẢM BIẾN (SẼ KHÔNG BỊ TREO KHI ĐỌC DS18B20 CHU KỲ ĐẦU) */
   extern void LCD_init(void);
   extern void SensorService_Init(void);
   extern void AlarmLogic_Init(void);
   LCD_init();
   SensorService_Init();
   AlarmLogic_Init();
-  
+
+  printf("Hardware Peripheral Init Done! Activating FreeRTOS Kernel...\r\n");
+
+  // Đọc tần số PCLK1 chuẩn xác từ thư viện HAL
+  uint32_t pclk1_freq = HAL_RCC_GetPCLK1Freq();
+  uint32_t tim_clock = pclk1_freq;
+
+  /* Cấu trúc cho dòng STM32H5: Sử dụng CFGR2 và định nghĩa chuẩn RCC_CFGR2_PPRE1 */
+  if ((RCC->CFGR2 & RCC_CFGR2_PPRE1) != 0) {
+      tim_clock = pclk1_freq * 2;
+  }
+
+  printf("\r\n--- KIỂM TRA PHẦN CỨNG TIMER ---\r\n");
+  printf("[TIM2_CHECK] Tan so nguon cap cho Timer: %lu Hz (%lu MHz)\r\n", tim_clock, tim_clock / 1000000);
+  printf("[TIM2_CHECK] Prescaler hien tai: %lu\r\n", (uint32_t)htim2.Init.Prescaler);
+  printf("[TIM2_CHECK] Thoi gian 1 tick cua TIM2 = %.3f us\r\n", (float)(htim2.Init.Prescaler + 1) / ((float)tim_clock / 1000000.0f));
+  printf("--------------------------------\r\n");
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -188,7 +212,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /* MPU Configuration */
@@ -215,12 +238,15 @@ void MPU_Config(void)
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 }
 
+/**
+  * @brief  Callback phục vụ xử lý ngắt định kỳ cho cả SysTick (TIM6) và Luồng quét Bare-metal (TIM2)
+  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  if (htim->Instance == TIM6)
-  {
-    HAL_IncTick();
-  }
+	if (htim->Instance == TIM6)
+	  {
+	    HAL_IncTick();
+	  }
 }
 
 void Error_Handler(void)

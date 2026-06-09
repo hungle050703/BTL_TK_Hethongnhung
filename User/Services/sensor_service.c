@@ -1,86 +1,68 @@
 #include "sensor_service.h"
 #include "ds18b20.h"
 #include "mq2.h"
-#include "main.h"
 
-extern ADC_HandleTypeDef hadc2; // ADC2 để đọc MH-Sensor AO từ PB1 
+extern ADC_HandleTypeDef hadc2; // Thêm ADC2 để dùng cho MH-Sensor
+
+// Không dùng DMA nữa
+// uint16_t adc_dma_buffer[1];
+// extern ADC_HandleTypeDef hadc1;
 
 static uint32_t last_ds18b20_tick = 0;
-static uint8_t ds18b20_state = 0; 
-static uint8_t ds18b20_fail_count = 0;
+static uint8_t ds18b20_state = 0; // 0: Idle/Request, 1: Waiting for conversion
 
 void SensorService_Init(void) {
     DS18B20_Init();
     MQ2_Init();
-    last_ds18b20_tick = 0;
-    ds18b20_state = 0;
-    ds18b20_fail_count = 0;
+    // Đã chuyển phần đọc ADC của MQ-2 sang chế độ thủ công (Polling) trong mq2.c
+    // Không dùng DMA để giải quyết triệt để lỗi HardFault trên dòng STM32H5
 }
 
 void SensorService_Update(SensorData_t *data) {
-    if (data == NULL) return;
-
     uint32_t current_tick = HAL_GetTick();
 
-    // =================================================================
-    // 1. --- XỬ LÝ DS18B20 KHÔNG DÙNG DELAY (NON-BLOCKING STATE MACHINE) ---
-    // =================================================================
+    // --- Xử lý DS18B20 không dùng Delay (Non-blocking) ---
     if (ds18b20_state == 0) {
+        // Giai đoạn 1: Ra lệnh cho DS18B20 bắt đầu đo
         if (DS18B20_Start()) {
             DS18B20_Write(0xCC); // Skip ROM
-            DS18B20_Write(0x44); // Convert T
+            DS18B20_Write(0x44); // Gửi lệnh Convert T
             last_ds18b20_tick = current_tick;
-            ds18b20_state = 1;
-        } else {
-            ds18b20_fail_count++;
-            if (ds18b20_fail_count >= 3) {
-                data->temperature = -999.0f; // Xác định mất cảm biến
-            }
+            ds18b20_state = 1;   // Chuyển sang trạng thái chờ
         }
     } 
     else if (ds18b20_state == 1) {
+        // Giai đoạn 2: Kiểm tra xem đã đủ 750ms chưa
         if (current_tick - last_ds18b20_tick >= 750) {
-            float temp_read = DS18B20_ReadTemperature_NonBlocking();
-
-            if (temp_read > -50.0f && temp_read < 125.0f) {
-                data->temperature = temp_read; // Đọc chuẩn
-                ds18b20_fail_count = 0;
-            } else {
-                ds18b20_fail_count++;
-                if (ds18b20_fail_count >= 3) {
-                    data->temperature = -999.0f; // Báo mất cảm biến hoặc đọc lỗi
-                }
-            }
-            ds18b20_state = 0; // Quay về State 0
+            data->temperature = DS18B20_ReadTemperature_NonBlocking();
+            ds18b20_state = 0;   // Quay lại chu kỳ tiếp theo
         }
     }
     
-    // =================================================================
-    // 2. --- XỬ LÝ KHÓI MQ2 TỪ ADC (POLLING THỦ CÔNG) ---
-    // =================================================================
+    // --- Xử lý MQ2 từ ADC1 (Polling) ---
     data->smoke_raw = MQ2_ReadRawData();
     data->smoke_conc = MQ2_CalculateGasConcentration(data->smoke_raw);
 
-    // =================================================================
-    // 3. --- TÍCH HỢP CẢM BIẾN LỬA HỒNG NGOẠI ---
-    // =================================================================
+    // --- Xử lý MH-Sensor (Hồng ngoại cảnh báo lửa/vật cản) ---
+    // 1. Đọc tín hiệu Digital (DO) trên PA3
     if (HAL_GPIO_ReadPin(GPIO_DO_MH_sensor_GPIO_Port, GPIO_DO_MH_sensor_Pin) == GPIO_PIN_RESET) {
-        data->fire_detected = 1;
-        data->mh_sensor_do = 0;
+        data->mh_sensor_do = 0; // Kích hoạt (Có ngọn lửa/vật cản)
+        data->fire_detected = 1; // Cập nhật cờ fire_detected
     } else {
+        data->mh_sensor_do = 1; // Bình thường
         data->fire_detected = 0;
-        data->mh_sensor_do = 1;
-    }
-    
-    HAL_ADC_Stop(&hadc2);
-    HAL_ADC_Start(&hadc2);
-    if (HAL_ADC_PollForConversion(&hadc2, 10) == HAL_OK) {
-        uint32_t mh_raw = HAL_ADC_GetValue(&hadc2);
-        HAL_ADC_Stop(&hadc2);
-        data->mh_sensor_ao_volt = (float)mh_raw * (3.3f / 4095.0f);
-    } else {
-        data->mh_sensor_ao_volt = -1.0f;
     }
 
-    // 🟢 ĐÃ XÓA KHỐI PRINTF TẠI ĐÂY ĐỂ TRÁNH TRANH CHẤP UART VỚI APP_MAIN
+    // 2. Đọc tín hiệu Analog (AO) trên PB1 từ ADC2 (Polling)
+    HAL_ADC_Stop(&hadc2);  // Xóa cờ OVR nếu có
+    HAL_ADC_Start(&hadc2); // Bấm máy đo
+    if (HAL_ADC_PollForConversion(&hadc2, 10) == HAL_OK) {
+        uint32_t mh_raw = HAL_ADC_GetValue(&hadc2);
+        HAL_ADC_Stop(&hadc2); // Khóa lại
+        
+        // Đổi ra Volt (Chân PB1 chịu tối đa 3.3V)
+        data->mh_sensor_ao_volt = (float)mh_raw * (3.3f / 4095.0f);
+    } else {
+        data->mh_sensor_ao_volt = -1.0f; // Báo lỗi
+    }
 }

@@ -63,7 +63,8 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/display/display_service.h \
- C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/esp32_service.h
 ../Core/Inc/app_freertos.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -130,3 +131,4 @@ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/display/display_service.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/esp32_service.h:

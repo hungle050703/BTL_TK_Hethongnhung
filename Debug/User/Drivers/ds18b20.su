@@ -1,9 +1,6 @@
-../User/Drivers/ds18b20.c:12:20:DS18B20_Set_Pin_Output	32	static
-../User/Drivers/ds18b20.c:21:20:DS18B20_Set_Pin_Input	32	static
-../User/Drivers/ds18b20.c:31:6:delay_us	24	static
-../User/Drivers/ds18b20.c:41:9:DS18B20_Start	16	static
-../User/Drivers/ds18b20.c:77:6:DS18B20_Write	24	static
-../User/Drivers/ds18b20.c:100:9:DS18B20_Read	16	static
-../User/Drivers/ds18b20.c:124:6:DS18B20_Init	8	static
-../User/Drivers/ds18b20.c:129:7:DS18B20_ReadTemperature	16	static
-../User/Drivers/ds18b20.c:171:7:DS18B20_ReadTemperature_NonBlocking	16	static
+../User/Drivers/ds18b20.c:11:6:delay_us	24	static
+../User/Drivers/ds18b20.c:22:9:DS18B20_Start	16	static
+../User/Drivers/ds18b20.c:49:6:DS18B20_Write	24	static
+../User/Drivers/ds18b20.c:72:9:DS18B20_Read	16	static
+../User/Drivers/ds18b20.c:97:6:DS18B20_Init	8	static
+../User/Drivers/ds18b20.c:102:7:DS18B20_ReadTemperature_NonBlocking	16	static

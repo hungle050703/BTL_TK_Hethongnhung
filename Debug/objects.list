@@ -101,4 +101,5 @@
 "./User/Drivers/ds18b20.o"
 "./User/Drivers/mq2.o"
 "./User/Services/display/display_service.o"
+"./User/Services/esp32_service.o"
 "./User/Services/sensor_service.o"

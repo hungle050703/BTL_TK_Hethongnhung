@@ -1,2 +1,2 @@
-../User/Services/sensor_service.c:12:6:SensorService_Init	1
-../User/Services/sensor_service.c:20:6:SensorService_Update	12
+../User/Services/sensor_service.c:14:6:SensorService_Init	1
+../User/Services/sensor_service.c:21:6:SensorService_Update	7

@@ -5,12 +5,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../User/Services/esp32_service.c \
 ../User/Services/sensor_service.c 
 
 OBJS += \
+./User/Services/esp32_service.o \
 ./User/Services/sensor_service.o 
 
 C_DEPS += \
+./User/Services/esp32_service.d \
 ./User/Services/sensor_service.d 
 
 
@@ -21,7 +24,7 @@ User/Services/%.o User/Services/%.su User/Services/%.cyclo: ../User/Services/%.c
 clean: clean-User-2f-Services
 
 clean-User-2f-Services:
-	-$(RM) ./User/Services/sensor_service.cyclo ./User/Services/sensor_service.d ./User/Services/sensor_service.o ./User/Services/sensor_service.su
+	-$(RM) ./User/Services/esp32_service.cyclo ./User/Services/esp32_service.d ./User/Services/esp32_service.o ./User/Services/esp32_service.su ./User/Services/sensor_service.cyclo ./User/Services/sensor_service.d ./User/Services/sensor_service.o ./User/Services/sensor_service.su
 
 .PHONY: clean-User-2f-Services
 
