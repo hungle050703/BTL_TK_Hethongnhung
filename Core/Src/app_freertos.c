@@ -6,84 +6,173 @@
   */
 /* USER CODE END Header */
 
+/* Includes ------------------------------------------------------------------*/
 #include "app_freertos.h"
-#include "cmsis_os2.h"
-#include "sensor_service.h"
-#include "alarm_logic.h"
-#include "display/display_panel.h"
-#include "display/display_service.h"
-#include <stdio.h>
-#include <string.h>
 
-/* Private variables */
-extern SensorData_t myData;
-AlarmLevel_t g_alarm_level = ALARM_NONE;
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
-/* Task Handle */
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+/* USER CODE BEGIN Variables */
+
+/* USER CODE END Variables */
+/* Definitions for Sensor_Task */
 osThreadId_t Sensor_TaskHandle;
+const osThreadAttr_t Sensor_Task_attributes = {
+  .name = "Sensor_Task",
+  .priority = (osPriority_t) osPriorityNormal,
+  .stack_size = 128 * 4
+};
+/* Definitions for Alarm_Logic_Task */
 osThreadId_t Alarm_Logic_TaskHandle;
+const osThreadAttr_t Alarm_Logic_Task_attributes = {
+  .name = "Alarm_Logic_Task",
+  .priority = (osPriority_t) osPriorityAboveNormal,
+  .stack_size = 128 * 4
+};
+/* Definitions for Comm_4G_Task */
 osThreadId_t Comm_4G_TaskHandle;
+const osThreadAttr_t Comm_4G_Task_attributes = {
+  .name = "Comm_4G_Task",
+  .priority = (osPriority_t) osPriorityLow,
+  .stack_size = 128 * 4
+};
+/* Definitions for DataMutex */
 osMutexId_t DataMutexHandle;
+const osMutexAttr_t DataMutex_attributes = {
+  .name = "DataMutex"
+};
+/* Definitions for myQueue01 */
+osMessageQueueId_t myQueue01Handle;
+const osMessageQueueAttr_t myQueue01_attributes = {
+  .name = "myQueue01"
+};
 
+/* Private function prototypes -----------------------------------------------*/
+/* USER CODE BEGIN FunctionPrototypes */
+
+/* USER CODE END FunctionPrototypes */
+
+/**
+  * @brief  FreeRTOS initialization
+  * @param  None
+  * @retval None
+  */
 void MX_FREERTOS_Init(void) {
-  DataMutexHandle = osMutexNew(NULL);
-  Sensor_TaskHandle = osThreadNew(StartDefaultTask, NULL, NULL);
-  Alarm_Logic_TaskHandle = osThreadNew(StartTask02, NULL, NULL);
-  Comm_4G_TaskHandle = osThreadNew(StartTask03, NULL, NULL);
-}
+  /* USER CODE BEGIN Init */
 
-void StartDefaultTask(void *argument) {
-  SensorService_Init();
-  SensorData_t local_data;
-  for(;;) {
-    SensorService_Update(&local_data);
-    if (osMutexAcquire(DataMutexHandle, 10) == osOK) {
-        myData = local_data;
-        osMutexRelease(DataMutexHandle);
-    }
-    osDelay(50);
+  /* USER CODE END Init */
+  /* creation of DataMutex */
+  DataMutexHandle = osMutexNew(&DataMutex_attributes);
+
+  /* USER CODE BEGIN RTOS_MUTEX */
+  /* add mutexes, ... */
+  /* USER CODE END RTOS_MUTEX */
+
+  /* USER CODE BEGIN RTOS_SEMAPHORES */
+  /* add semaphores, ... */
+  /* USER CODE END RTOS_SEMAPHORES */
+
+  /* USER CODE BEGIN RTOS_TIMERS */
+  /* start timers, add new ones, ... */
+  /* USER CODE END RTOS_TIMERS */
+  /* creation of myQueue01 */
+  myQueue01Handle = osMessageQueueNew (16, sizeof(uint16_t), &myQueue01_attributes);
+
+  /* USER CODE BEGIN RTOS_QUEUES */
+  /* add queues, ... */
+  /* USER CODE END RTOS_QUEUES */
+  /* creation of Sensor_Task */
+  Sensor_TaskHandle = osThreadNew(StartDefaultTask, NULL, &Sensor_Task_attributes);
+
+  /* creation of Alarm_Logic_Task */
+  Alarm_Logic_TaskHandle = osThreadNew(StartTask02, NULL, &Alarm_Logic_Task_attributes);
+
+  /* creation of Comm_4G_Task */
+  Comm_4G_TaskHandle = osThreadNew(StartTask03, NULL, &Comm_4G_Task_attributes);
+
+  /* USER CODE BEGIN RTOS_THREADS */
+  /* add threads, ... */
+  /* USER CODE END RTOS_THREADS */
+
+  /* USER CODE BEGIN RTOS_EVENTS */
+  /* add events, ... */
+  /* USER CODE END RTOS_EVENTS */
+
+}
+/* USER CODE BEGIN Header_StartDefaultTask */
+/**
+* @brief Function implementing the Sensor_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartDefaultTask */
+void StartDefaultTask(void *argument)
+{
+  /* USER CODE BEGIN Sensor_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
   }
+  /* USER CODE END Sensor_Task */
 }
 
-void StartTask02(void *argument) {
-  // KHỞI TẠO CHỈ GỌI 1 LẦN TRƯỚC VÒNG LẶP
-  AlarmLogic_Init();
-
-  SensorData_t temp_sensor_data;
-  DisplayRenderer renderer = {
-      .Clear = Display_Clear,
-      .DrawHeader = Display_DrawHeader,
-      .DrawLine = Display_DrawLine,
-      .DrawFooter = Display_DrawFooter,
-  };
-
-  for(;;) {
-    if (osMutexAcquire(DataMutexHandle, 10) == osOK) {
-        temp_sensor_data = myData;
-        osMutexRelease(DataMutexHandle);
-    }
-
-    g_alarm_level = Alarm_ProcessLogic(&temp_sensor_data);
-    Alarm_ExecuteAction(g_alarm_level);
-
-    /* Simple status screen based on alarm level */
-    uint8_t fire = (g_alarm_level == ALARM_CRITICAL);
-    uint8_t trouble = (g_alarm_level == ALARM_WARNING);
-    uint8_t supervisor = (g_alarm_level == ALARM_SUPERVISORY);
-    uint8_t disable = (g_alarm_level == ALARM_DISABLED);
-    Display_FirePanelStatus(&renderer, fire, trouble, supervisor, disable);
-
-    osDelay(500); // Give SPI time and avoid redraw flooding
+/* USER CODE BEGIN Header_StartTask02 */
+/**
+* @brief Function implementing the Alarm_Logic_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask02 */
+void StartTask02(void *argument)
+{
+  /* USER CODE BEGIN Alarm_Logic_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
   }
+  /* USER CODE END Alarm_Logic_Task */
 }
 
-void StartTask03(void *argument) {
-  for(;;) {
-    if (g_alarm_level == ALARM_CRITICAL) {
-        printf("[4G] ALERT!\r\n");
-        osDelay(10000);
-    } else {
-        osDelay(3000);
-    }
+/* USER CODE BEGIN Header_StartTask03 */
+/**
+* @brief Function implementing the Comm_4G_Task thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask03 */
+void StartTask03(void *argument)
+{
+  /* USER CODE BEGIN Comm_4G_Task */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
   }
+  /* USER CODE END Comm_4G_Task */
 }
+
+/* Private application code --------------------------------------------------*/
+/* USER CODE BEGIN Application */
+
+/* USER CODE END Application */
+

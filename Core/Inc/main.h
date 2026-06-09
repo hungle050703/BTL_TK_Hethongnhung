@@ -78,6 +78,8 @@ void Error_Handler(void);
 #define ADC2_AO_MH_sensor_GPIO_Port GPIOB
 #define BUZZER_ALARM_Pin GPIO_PIN_15
 #define BUZZER_ALARM_GPIO_Port GPIOD
+#define LED_YELLOW_ALARM_Pin GPIO_PIN_3
+#define LED_YELLOW_ALARM_GPIO_Port GPIOG
 #define LED_RED_ALARM_Pin GPIO_PIN_4
 #define LED_RED_ALARM_GPIO_Port GPIOG
 #define UCPD_FLT_Pin GPIO_PIN_7
@@ -92,14 +94,6 @@ void Error_Handler(void);
 #define SWCLK_GPIO_Port GPIOA
 #define T_JTDI_Pin GPIO_PIN_15
 #define T_JTDI_GPIO_Port GPIOA
-#define A7677_UART5_TX_Pin GPIO_PIN_12
-#define A7677_UART5_TX_GPIO_Port GPIOC
-#define A7677_RST_Pin GPIO_PIN_0
-#define A7677_RST_GPIO_Port GPIOD
-#define A7677_PWRKEY_Pin GPIO_PIN_1
-#define A7677_PWRKEY_GPIO_Port GPIOD
-#define A7677_UART5_RX_Pin GPIO_PIN_2
-#define A7677_UART5_RX_GPIO_Port GPIOD
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
 #define ARD_D1_TX_Pin GPIO_PIN_6

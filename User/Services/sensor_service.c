@@ -23,14 +23,21 @@ void SensorService_Update(SensorData_t *data) {
     // =================================================================
     // 1. --- XỬ LÝ DS18B20 KHÔNG DÙNG DELAY (NON-BLOCKING) ---
     // =================================================================
+    static uint8_t ds18b20_fail_count = 0;
     if (ds18b20_state == 0) {
         if (DS18B20_Start()) {
             DS18B20_Write(0xCC); // Skip ROM
             DS18B20_Write(0x44); // Convert T
             last_ds18b20_tick = current_tick;
-            ds18b20_state = 1;   
+            ds18b20_state = 1;
         } else {
-            data->temperature = -999.0f; // Báo lỗi kết nối lên LCD nếu tuột dây cảm biến
+            // Không gán ngay -999 nếu chỉ bị văng một lần, giữ giá trị cũ để tránh loạn xạ
+            ds18b20_fail_count++;
+            if (ds18b20_fail_count >= 5) {
+                data->temperature = -999.0f;
+            }
+            HAL_GPIO_WritePin(DS18B20_PORT, DS18B20_PIN, GPIO_PIN_SET);
+            delay_us(5);
         }
     } 
     else if (ds18b20_state == 1) {
@@ -38,6 +45,12 @@ void SensorService_Update(SensorData_t *data) {
             float temp_read = DS18B20_ReadTemperature_NonBlocking();
             if (temp_read > -50.0f && temp_read < 125.0f) { // Bộ lọc giới hạn vật lý
                 data->temperature = temp_read;
+                ds18b20_fail_count = 0;
+            } else {
+                ds18b20_fail_count++;
+                if (ds18b20_fail_count >= 5) {
+                    data->temperature = -999.0f;
+                }
             }
             ds18b20_state = 0; // Quay về State 0
         }

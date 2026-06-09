@@ -1,9 +1,15 @@
 #include "alarm_logic.h"
 #include "main.h"
-#include <stdio.h> 
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 // SỬA LỖI LINKER: Khai báo extern để tham chiếu biến từ file gpio.c, không định nghĩa lại ô nhớ
 extern volatile uint8_t is_buzzer_muted;
+extern UART_HandleTypeDef huart3;
+
+char alarm_status_text[24] = "AN TOAN!";
+UG_COLOR alarm_status_color = C_WHITE;
 
 /**
   * @brief  Khởi tạo trạng thái ban đầu cho hệ thống cảnh báo ngoại vi
@@ -11,6 +17,58 @@ extern volatile uint8_t is_buzzer_muted;
 void AlarmLogic_Init(void) {
     HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_RESET);
+}
+
+void Process_Alarm_System(float temperature, int smoke, int fire_detected) {
+    int current_status = ST_AN_TOAN;
+    int danger_count = 0;
+    char tx_buffer[64];
+    bool sensor_missing = (temperature == 0.0f || temperature == -999.0f || temperature < -50.0f || smoke > 100);
+    bool temp_danger = (temperature > 55.0f);
+    bool smoke_danger = (smoke > 50);
+    bool fire_danger = (fire_detected == 1);
+
+    if (sensor_missing) {
+        current_status = ST_MAT_CAM_BIEN;
+    } else {
+        if (temp_danger) danger_count++;
+        if (smoke_danger) danger_count++;
+        if (fire_danger) danger_count++;
+
+        if (danger_count >= 2) {
+            current_status = ST_HOA_HOAN;
+        } else if (danger_count == 1) {
+            current_status = ST_DE_PHONG;
+        } else {
+            current_status = ST_AN_TOAN;
+        }
+    }
+
+    switch (current_status) {
+        case ST_MAT_CAM_BIEN:
+            strcpy(alarm_status_text, "MAT CAM BIEN");
+            alarm_status_color = C_LIGHT_GRAY;
+            break;
+        case ST_DE_PHONG:
+            strcpy(alarm_status_text, "DE PHONG!");
+            alarm_status_color = C_YELLOW;
+            break;
+        case ST_HOA_HOAN:
+            strcpy(alarm_status_text, "HOA HOAN!!!");
+            alarm_status_color = C_RED;
+            break;
+        default:
+            strcpy(alarm_status_text, "AN TOAN!");
+            alarm_status_color = C_WHITE;
+            break;
+    }
+
+    snprintf(tx_buffer, sizeof(tx_buffer), "*%d,%.1f,%d,%d#\r\n",
+             current_status, temperature, smoke, fire_detected);
+
+    if (current_status != ST_AN_TOAN) {
+        HAL_UART_Transmit(&huart3, (uint8_t*)tx_buffer, strlen(tx_buffer), 50);
+    }
 }
 
 /**

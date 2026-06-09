@@ -5,17 +5,14 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../User/Drivers/a7677.c \
 ../User/Drivers/ds18b20.c \
 ../User/Drivers/mq2.c 
 
 OBJS += \
-./User/Drivers/a7677.o \
 ./User/Drivers/ds18b20.o \
 ./User/Drivers/mq2.o 
 
 C_DEPS += \
-./User/Drivers/a7677.d \
 ./User/Drivers/ds18b20.d \
 ./User/Drivers/mq2.d 
 
@@ -27,7 +24,7 @@ User/Drivers/%.o User/Drivers/%.su User/Drivers/%.cyclo: ../User/Drivers/%.c Use
 clean: clean-User-2f-Drivers
 
 clean-User-2f-Drivers:
-	-$(RM) ./User/Drivers/a7677.cyclo ./User/Drivers/a7677.d ./User/Drivers/a7677.o ./User/Drivers/a7677.su ./User/Drivers/ds18b20.cyclo ./User/Drivers/ds18b20.d ./User/Drivers/ds18b20.o ./User/Drivers/ds18b20.su ./User/Drivers/mq2.cyclo ./User/Drivers/mq2.d ./User/Drivers/mq2.o ./User/Drivers/mq2.su
+	-$(RM) ./User/Drivers/ds18b20.cyclo ./User/Drivers/ds18b20.d ./User/Drivers/ds18b20.o ./User/Drivers/ds18b20.su ./User/Drivers/mq2.cyclo ./User/Drivers/mq2.d ./User/Drivers/mq2.o ./User/Drivers/mq2.su
 
 .PHONY: clean-User-2f-Drivers
 

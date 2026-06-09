@@ -84,10 +84,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(LED_GREEN_ON_GPIO_Port, LED_GREEN_ON_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, BUZZER_ALARM_Pin|A7677_RST_Pin|A7677_PWRKEY_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(BUZZER_ALARM_GPIO_Port, BUZZER_ALARM_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_RED_ALARM_GPIO_Port, LED_RED_ALARM_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOG, LED_YELLOW_ALARM_Pin|LED_RED_ALARM_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PC13 */
   GPIO_InitStruct.Pin = GPIO_PIN_13;
@@ -129,19 +129,19 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LED_GREEN_ON_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : BUZZER_ALARM_Pin A7677_RST_Pin A7677_PWRKEY_Pin */
-  GPIO_InitStruct.Pin = BUZZER_ALARM_Pin|A7677_RST_Pin|A7677_PWRKEY_Pin;
+  /*Configure GPIO pin : BUZZER_ALARM_Pin */
+  GPIO_InitStruct.Pin = BUZZER_ALARM_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+  HAL_GPIO_Init(BUZZER_ALARM_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED_RED_ALARM_Pin */
-  GPIO_InitStruct.Pin = LED_RED_ALARM_Pin;
+  /*Configure GPIO pins : LED_YELLOW_ALARM_Pin LED_RED_ALARM_Pin */
+  GPIO_InitStruct.Pin = LED_YELLOW_ALARM_Pin|LED_RED_ALARM_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_RED_ALARM_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOG, &GPIO_InitStruct);
 
   /*Configure GPIO pin : UCPD_FLT_Pin */
   GPIO_InitStruct.Pin = UCPD_FLT_Pin;

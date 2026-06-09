@@ -2,6 +2,12 @@
 #define ALARM_LOGIC_H_
 
 #include "sensor_service.h"
+#include "ugui.h"
+
+#define ST_AN_TOAN       1
+#define ST_MAT_CAM_BIEN  2
+#define ST_DE_PHONG      3
+#define ST_HOA_HOAN      4
 
 typedef enum {
     ALARM_NONE = 0,
@@ -13,6 +19,8 @@ typedef enum {
 
 // Khai báo extern để main.c hoặc alarm_logic.c đều hiểu chung một biến
 extern volatile uint8_t is_buzzer_muted;
+extern char alarm_status_text[24];
+extern UG_COLOR alarm_status_color;
 
 void AlarmLogic_Init(void);
 void Alarm_SetUserMute(void);

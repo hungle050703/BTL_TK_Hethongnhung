@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include "cmsis_os2.h"
 #include "main.h"
 #include <stdio.h>
@@ -6,6 +7,7 @@
 #include "display/display_panel.h"
 #include "../Services/display/display_service.h"
 #include "../Services/sensor_service.h"
+#include "../Drivers/mq2.h"
 #include "alarm_logic.h"
 
 /* Forward declares from other units */
@@ -37,19 +39,38 @@ void App_Main(void)
         Alarm_ExecuteAction(current_level);  // Bật LED, Buzzer dựa trên level
 
         uint8_t fire = myData.fire_detected ? 1 : 0;
-        uint8_t trouble = (uint8_t)myData.temperature;
-        uint8_t supervisor = (uint8_t)(myData.smoke_conc * 100.0f);
+        float smoke_v = myData.smoke_conc;
+        float smoke_percentage = (smoke_v / 5.0f) * 100.0f;
+        int supervisor = (int)smoke_percentage;
+        float base_v = MQ2_GetBaseVoltage();
+        bool fire_danger = (myData.mh_sensor_do == 0);
         uint8_t disable = is_buzzer_muted ? 1 : 0;
 
-        Display_FirePanelStatus(&renderer, fire, trouble, supervisor, disable);
+        Process_Alarm_System(myData.temperature, supervisor, fire);
+        Display_FirePanelStatus(&renderer, alarm_status_text, alarm_status_color,
+                                 fire, (uint8_t)myData.temperature, supervisor, disable);
 
-        // Log chi tiết mỗi 500ms
+        // Log chung theo mẫu cũ nhưng trạng thái đồng bộ với LCD
         static uint32_t last_app_log = 0;
         uint32_t current_tick = HAL_GetTick();
-        if (current_tick - last_app_log >= 500) {
-            printf("[UNG DUNG CHINH] Muc:%d | Lua:%d | Nhiet do:%.1fC | Khoi:%.2fppm | DO:%d | AO:%.2fV | Da tat:%d\r\n",
-                   current_level, fire, myData.temperature, myData.smoke_conc,
-                   myData.mh_sensor_do, myData.mh_sensor_ao_volt, disable);
+        if (current_tick - last_app_log >= 1000) {
+            const char* smoke_status;
+            if (smoke_v < base_v + 0.2f) {
+                smoke_status = "SACH";
+            } else if (smoke_v < base_v + 0.6f) {
+                smoke_status = "CO KHOI NHE";
+            } else {
+                smoke_status = "NGUY HIEM!";
+            }
+            const char* mh_status = fire_danger ? "CO LUA/VAT CAN!!" : "BINH THUONG";
+
+            printf("[UNG DUNG CHINH] %s\r\n", alarm_status_text);
+            printf("[UNG DUNG CHINH] Nhiet do: %5.2f C\r\n", myData.temperature);
+            printf("[UNG DUNG CHINH]   Khoi MQ-2:   %4.1f %% - %s (Base: %.2fV | Now: %.2fV)\r\n",
+                   smoke_percentage, smoke_status, base_v, smoke_v);
+            printf("[UNG DUNG CHINH]   Lua MH-SENS: %s (AO: %.2fV)\r\n",
+                   mh_status, myData.mh_sensor_ao_volt);
+            printf("[UNG DUNG CHINH] ----------------------------------------\r\n");
             last_app_log = current_tick;
         }
 

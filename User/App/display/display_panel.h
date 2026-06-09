@@ -19,10 +19,12 @@ typedef struct {
 
 /* Render the Fire Alarm Panel status as specified in User/README*.md */
 void Display_FirePanelStatus(const DisplayRenderer* r,
-							 uint8_t fire, uint8_t trouble,
-							 uint8_t supervisor, uint8_t disable);
-
-#ifdef __cplusplus
+                             const char* status_text,
+                             UG_COLOR status_color,
+                             uint8_t fire,
+                             uint8_t trouble,
+                             uint8_t supervisor,
+                             uint8_t disable);
 }
 #endif
 
