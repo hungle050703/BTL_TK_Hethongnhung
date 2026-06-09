@@ -1,6 +1,5 @@
 User/App/alarm_logic.o: ../User/App/alarm_logic.c \
- ../User/App/alarm_logic.h \
- C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h \
+ ../User/App/alarm_logic.h ../User/App/../Services/sensor_service.h \
  ../Core/Inc/main.h ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h \
  ../Core/Inc/stm32h5xx_hal_conf.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_rcc.h \
@@ -34,9 +33,20 @@ User/App/alarm_logic.o: ../User/App/alarm_logic.c \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_tim_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
- ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h
+ ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_theme.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_button.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_checkbox.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h
 ../User/App/alarm_logic.h:
-C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h:
+../User/App/../Services/sensor_service.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
@@ -72,3 +82,14 @@ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_theme.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_button.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_checkbox.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h:

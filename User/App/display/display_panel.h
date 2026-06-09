@@ -10,11 +10,11 @@ extern "C" {
 
 /* Renderer interface to enforce layering: panel does not include service header */
 typedef struct {
-	void (*Clear)(UG_COLOR bg);
-	void (*DrawHeader)(const char* text);
-	void (*DrawLine)(const char* label, uint8_t value, UG_COLOR color, uint16_t y);
-	void (*DrawFooter)(const char* text, uint16_t x, uint16_t y);
-	void (*DrawString)(const char* text, UG_COLOR color, uint16_t x, uint16_t y, uint8_t font_size);
+    void (*Clear)(UG_COLOR bg);
+    void (*DrawHeader)(const char* text);
+    void (*DrawLine)(const char* label, uint8_t value, UG_COLOR color, uint16_t y);
+    void (*DrawFooter)(const char* text, uint16_t x, uint16_t y);
+    void (*DrawString)(const char* text, UG_COLOR color, uint16_t x, uint16_t y, uint8_t font_size);
 } DisplayRenderer;
 
 /* Render the Fire Alarm Panel status as specified in User/README*.md */
@@ -25,6 +25,8 @@ void Display_FirePanelStatus(const DisplayRenderer* r,
                              uint8_t trouble,
                              uint8_t supervisor,
                              uint8_t disable);
+
+#ifdef __cplusplus
 }
 #endif
 

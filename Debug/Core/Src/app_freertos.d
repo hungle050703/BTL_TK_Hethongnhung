@@ -44,7 +44,26 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
- ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h
+ ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h \
+ ../Core/Inc/main.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/alarm_logic.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/sensor_service.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_theme.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_button.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_checkbox.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/display/display_service.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h
 ../Core/Inc/app_freertos.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
@@ -92,3 +111,22 @@ Core/Src/app_freertos.o: ../Core/Src/app_freertos.c \
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
 ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h:
+../Core/Inc/main.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/alarm_logic.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/sensor_service.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_theme.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_button.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_checkbox.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/display/display_service.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h:

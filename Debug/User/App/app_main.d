@@ -48,8 +48,8 @@ User/App/app_main.o: ../User/App/app_main.c \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h \
  ../User/App/../Services/display/display_service.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h \
- ../User/App/../Services/sensor_service.h ../User/App/alarm_logic.h \
- C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h
+ ../User/App/../Services/sensor_service.h ../User/App/../Drivers/mq2.h \
+ ../User/App/alarm_logic.h
 ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
@@ -101,5 +101,5 @@ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox
 ../User/App/../Services/display/display_service.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h:
 ../User/App/../Services/sensor_service.h:
+../User/App/../Drivers/mq2.h:
 ../User/App/alarm_logic.h:
-C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h:

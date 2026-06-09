@@ -39,7 +39,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/gpio.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/alarm_logic.h \
- C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/sensor_service.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h \
@@ -51,7 +51,18 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h \
- C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
+ ../Core/Inc/FreeRTOSConfig.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacro.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacrocommon.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
@@ -97,7 +108,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/gpio.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/alarm_logic.h:
-C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/../Services/sensor_service.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_colors.h:
@@ -109,4 +120,15 @@ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_image.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_progress.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_textbox.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/App/display/display_panel.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/mq2.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
+../Core/Inc/FreeRTOSConfig.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
+../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacro.h:
+../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM33_NTZ/non_secure/portmacrocommon.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:

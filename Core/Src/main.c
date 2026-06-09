@@ -4,16 +4,6 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
@@ -34,28 +24,30 @@
 #include "mq2.h"
 #include <stdio.h>
 #include <string.h>
+
+/* Khai bao header FreeRTOS nhan dien kieu du lieu Static */
+#include "FreeRTOS.h"
+#include "task.h"
+
+/* Dinh nghia chan Mute tuong thich cho nut nhan B1 (PC13) */
+#ifndef BTN_MUTE_Pin
+#define BTN_MUTE_Pin GPIO_PIN_13
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-// SỬA: Định nghĩa chân BTN_MUTE nếu chưa có trong cấu hình ioc (ví dụ chân User Button PC13)
-#ifndef BTN_MUTE_Pin
-#define BTN_MUTE_Pin GPIO_PIN_13
-#endif
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
 /* USER CODE BEGIN PV */
 SensorData_t myData;
 /* USER CODE END PV */
@@ -64,8 +56,9 @@ SensorData_t myData;
 void SystemClock_Config(void);
 static void MPU_Config(void);
 void MX_FREERTOS_Init(void);
+
 /* USER CODE BEGIN PFP */
-void App_Main(void); // <-- THÊM ĐÚNG VÀO ĐÂY, CÓ DẤU CHẤM PHẨY CHUẨN ĐÉT
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -86,12 +79,8 @@ int __io_putchar(int ch) {
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
-
-  /* MCU Configuration--------------------------------------------------------*/
 
   /* MPU Configuration--------------------------------------------------------*/
   MPU_Config();
@@ -100,14 +89,12 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -119,6 +106,7 @@ int main(void)
   MX_ADC2_Init();
   MX_SPI1_Init();
   MX_UART4_Init();
+
   /* USER CODE BEGIN 2 */
   printf("\r\n==================================================\r\n");
   printf("BTL EMBEDDED: THIET BI TRUYEN TIN BAO CHAY STARTING...\r\n");
@@ -126,54 +114,46 @@ int main(void)
   printf("==================================================\r\n");
   
   HAL_TIM_Base_Start(&htim2);
-
-  /* Initialize the new LCD/UGUI display stack */
-  App_Main();
-
   memset(&myData, 0, sizeof(SensorData_t));
-
   printf("Hardware Peripheral Init Done! Activating FreeRTOS Kernel...\r\n");
+  
+  /* IMPORTANT: Initialize LCD, Sensors, and Alarms BEFORE osKernelStart() */
+  /* Reason: LCD_init() requires large stack; cannot be done in task context */
+  extern void LCD_init(void);
+  extern void SensorService_Init(void);
+  extern void AlarmLogic_Init(void);
+  LCD_init();
+  SensorService_Init();
+  AlarmLogic_Init();
+  
   /* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();
-  /* Call init function for freertos objects (in app_freertos.c) */
+
+  /* Call init function for freertos objects */
   MX_FREERTOS_Init();
 
   /* Start scheduler */
   osKernelStart();
 
-  /* We should never get here as control is now taken by the scheduler */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+  /* We should never get here */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   }
-  /* USER CODE END 3 */
 }
 
 /**
   * @brief System Clock Configuration
-  * @retval None
   */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-  /** Configure the main internal regulator output voltage
-  */
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE3);
-
   while(!__HAL_PWR_GET_FLAG(PWR_FLAG_VOSRDY)) {}
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
@@ -191,8 +171,6 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2
                               |RCC_CLOCKTYPE_PCLK3;
@@ -206,41 +184,20 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-
-  /** Configure the programming delay
-  */
   __HAL_FLASH_SET_PROGRAM_DELAY(FLASH_PROGRAMMING_DELAY_1);
 }
 
 /* USER CODE BEGIN 4 */
-/**
-  * @brief  Hàm Callback xử lý ngắt ngoài (EXTI) cho nút nhấn trên dòng STM32H5.
-  * @param  GPIO_Pin: Tên chân kích hoạt ngắt phần cứng
-  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-    if (GPIO_Pin == BTN_MUTE_Pin)
-    {
-        extern void Alarm_SetUserMute(void);
-        Alarm_SetUserMute();
-        
-        printf("[INTERRUPT ALERT] Local Mute Button Activated via EXTI!\r\n");
-    }
-}
+
 /* USER CODE END 4 */
 
- /* MPU Configuration */
-
+/* MPU Configuration */
 void MPU_Config(void)
 {
   MPU_Region_InitTypeDef MPU_InitStruct = {0};
   MPU_Attributes_InitTypeDef MPU_AttributesInit = {0};
 
-  /* Disables the MPU */
   HAL_MPU_Disable();
-
-  /** Initializes and configures the Region 0 and the memory to be protected
-  */
   MPU_InitStruct.Enable = MPU_REGION_ENABLE;
   MPU_InitStruct.Number = MPU_REGION_NUMBER0;
   MPU_InitStruct.BaseAddress = 0x08FFF000;
@@ -251,66 +208,25 @@ void MPU_Config(void)
   MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-  /** Initializes and configures the Attribute 0 and the memory to be protected
-  */
   MPU_AttributesInit.Number = MPU_ATTRIBUTES_NUMBER0;
   MPU_AttributesInit.Attributes = INNER_OUTER(MPU_NOT_CACHEABLE);
 
   HAL_MPU_ConfigMemoryAttributes(&MPU_AttributesInit);
-  /* Enables the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
-
 }
 
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM6 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6)
   {
     HAL_IncTick();
   }
-  /* USER CODE BEGIN Callback 1 */
-
-  /* USER CODE END Callback 1 */
 }
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
   __disable_irq();
   while (1)
   {
   }
-  /* USER CODE END Error_Handler_Debug */
 }
-#ifdef USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  * where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t *file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */

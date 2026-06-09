@@ -1,8 +1,20 @@
+/*
+ * ============================================================
+ * WARNING: This file (app_main.c) is DEPRECATED and NOT USED
+ * ============================================================
+ * The FreeRTOS task system now uses Core/Src/app_freertos.c
+ * to manage Sensor_Task, Alarm_Logic_Task, and Comm_4G_Task.
+ * 
+ * Keep this file for reference only. Do NOT call App_Main().
+ * ============================================================
+ */
+
 #include <stdint.h>
 #include <stdbool.h>
 #include "cmsis_os2.h"
 #include "main.h"
 #include <stdio.h>
+
 /* App-level includes */
 #include "display/display_panel.h"
 #include "../Services/display/display_service.h"
@@ -10,14 +22,14 @@
 #include "../Drivers/mq2.h"
 #include "alarm_logic.h"
 
-/* Forward declares from other units */
+/* Forward declares từ các unit khác */
 extern void LCD_init(void);
 extern SensorData_t myData;
 extern volatile uint8_t is_buzzer_muted;
 
 void App_Main(void)
 {
-    /* Minimal LCD + GUI init and initialise sensor/alarm subsystems */
+    /* Khởi tạo phân hệ hiển thị và phân hệ xử lý dịch vụ cảm biến */
     LCD_init();
     SensorService_Init();
     AlarmLogic_Init();
@@ -32,25 +44,30 @@ void App_Main(void)
 
     while (1)
     {
+        // 1. Cập nhật dữ liệu từ tầng phần cứng (Non-blocking)
         SensorService_Update(&myData);
-        Alarm_SetUserMute();  // Đọc nút Mute từ GPIO
+        Alarm_SetUserMute();  // Đọc dữ liệu nút nhấn bảo vệ còi
         
+        // 2. Tính toán phân tầng mức độ cảnh báo cháy
         AlarmLevel_t current_level = Alarm_ProcessLogic(&myData);
-        Alarm_ExecuteAction(current_level);  // Bật LED, Buzzer dựa trên level
+        Alarm_ExecuteAction(current_level);
 
-        uint8_t fire = myData.fire_detected ? 1 : 0;
         float smoke_v = myData.smoke_conc;
         float smoke_percentage = (smoke_v / 5.0f) * 100.0f;
         int supervisor = (int)smoke_percentage;
         float base_v = MQ2_GetBaseVoltage();
         bool fire_danger = (myData.mh_sensor_do == 0);
         uint8_t disable = is_buzzer_muted ? 1 : 0;
+        uint8_t fire = myData.fire_detected ? 1 : 0;
 
+        // 3. Bắn dữ liệu UART truyền tin báo cháy sang Module ESP32 4G
         Process_Alarm_System(myData.temperature, supervisor, fire);
+
+        // 4. Cập nhật giao diện màn hình LCD tầng đồ họa
         Display_FirePanelStatus(&renderer, alarm_status_text, alarm_status_color,
                                  fire, (uint8_t)myData.temperature, supervisor, disable);
 
-        // Log chung theo mẫu cũ nhưng trạng thái đồng bộ với LCD
+        // 5. Quản lý in Log tập trung qua cổng debug UART định kỳ 1000ms
         static uint32_t last_app_log = 0;
         uint32_t current_tick = HAL_GetTick();
         if (current_tick - last_app_log >= 1000) {
@@ -64,8 +81,15 @@ void App_Main(void)
             }
             const char* mh_status = fire_danger ? "CO LUA/VAT CAN!!" : "BINH THUONG";
 
-            printf("[UNG DUNG CHINH] %s\r\n", alarm_status_text);
-            printf("[UNG DUNG CHINH] Nhiet do: %5.2f C\r\n", myData.temperature);
+            // Hiển thị trạng thái DS18B20 trực quan: Nếu lỗi hiện "MAT CAM BIEN" thay vì 0.0C
+            if (myData.temperature == -999.0f) {
+                printf("[UNG DUNG CHINH] STATUS: MAT CAM BIEN\r\n");
+                printf("[UNG DUNG CHINH] Nhiet do:  0.00 C\r\n");
+            } else {
+                printf("[UNG DUNG CHINH] STATUS: %s\r\n", alarm_status_text);
+                printf("[UNG DUNG CHINH] Nhiet do: %5.2f C\r\n", myData.temperature);
+            }
+
             printf("[UNG DUNG CHINH]   Khoi MQ-2:   %4.1f %% - %s (Base: %.2fV | Now: %.2fV)\r\n",
                    smoke_percentage, smoke_status, base_v, smoke_v);
             printf("[UNG DUNG CHINH]   Lua MH-SENS: %s (AO: %.2fV)\r\n",
@@ -74,6 +98,7 @@ void App_Main(void)
             last_app_log = current_tick;
         }
 
+        // 🟢 Nhường quyền điều phối luồng đa nhiệm chu kỳ 300ms của FreeRTOS
         osDelay(300);
     }
 }
