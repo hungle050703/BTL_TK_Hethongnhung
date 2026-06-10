@@ -1,2 +1,2 @@
-../User/Services/esp32_service.c:20:6:ESP32Service_Init	1
-../User/Services/esp32_service.c:30:6:ESP32Service_Process	5
+../User/Services/esp32_service.c:7:6:ESP32Service_Init	1
+../User/Services/esp32_service.c:12:6:ESP32Service_Process	4

@@ -33,8 +33,7 @@ User/Services/esp32_service.o: ../User/Services/esp32_service.c \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_tim_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
- ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
- ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h
+ ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h
 ../User/Services/esp32_service.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
@@ -71,4 +70,3 @@ User/Services/esp32_service.o: ../User/Services/esp32_service.c \
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
-../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:

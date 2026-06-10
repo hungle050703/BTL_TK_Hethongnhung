@@ -1,5 +1,5 @@
-User/App/app_main.o: ../User/App/app_main.c \
- ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
+User/App/app_main.o: ../User/App/app_main.c ../User/App/app_main.h \
+ C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h \
  ../Core/Inc/main.h ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h \
  ../Core/Inc/stm32h5xx_hal_conf.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_rcc.h \
@@ -34,6 +34,7 @@ User/App/app_main.o: ../User/App/app_main.c \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h \
  ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h \
+ ../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h \
  ../User/App/display/display_panel.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h \
@@ -50,7 +51,8 @@ User/App/app_main.o: ../User/App/app_main.c \
  C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_fonts.h \
  ../User/App/../Services/sensor_service.h ../User/App/../Drivers/mq2.h \
  ../User/App/alarm_logic.h
-../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
+../User/App/app_main.h:
+C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Services/sensor_service.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal.h:
 ../Core/Inc/stm32h5xx_hal_conf.h:
@@ -86,6 +88,7 @@ User/App/app_main.o: ../User/App/app_main.c \
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_uart_ex.h:
 ../Drivers/STM32H5xx_HAL_Driver/Inc/stm32h5xx_hal_exti.h:
+../Middlewares/Third_Party/CMSIS/RTOS2/Include/cmsis_os2.h:
 ../User/App/display/display_panel.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui.h:
 C:/Users/ADMIN/Documents/Code/BTL_TK_Hethongnhung/User/Drivers/UGUI/ugui_config.h:

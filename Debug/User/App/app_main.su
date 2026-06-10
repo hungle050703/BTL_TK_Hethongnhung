@@ -1,1 +1,4 @@
-../User/App/app_main.c:30:6:App_Main	112	static
+../User/App/app_main.c:41:6:App_Subsystems_Init	8	static
+../User/App/app_main.c:52:6:App_Sensor_Process	16	static
+../User/App/app_main.c:69:6:App_Alarm_And_Display_Execute	88	static
+../User/App/app_main.c:113:6:App_Communication_Transmit	24	static

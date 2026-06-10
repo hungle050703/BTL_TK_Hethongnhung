@@ -1,2 +1,2 @@
-../User/Services/esp32_service.c:20:6:ESP32Service_Init	8	static
-../User/Services/esp32_service.c:30:6:ESP32Service_Process	8	static
+../User/Services/esp32_service.c:7:6:ESP32Service_Init	16	static
+../User/Services/esp32_service.c:12:6:ESP32Service_Process	80	static
